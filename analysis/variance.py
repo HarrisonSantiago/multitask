@@ -173,8 +173,10 @@ def compute_hist_varprop(model_dir, rule_pair, random_rotation=False):
 
     hists = list()
     for model_dir in model_dirs:
+        print('Here')
         hist, bins_edge_ = _compute_hist_varprop(model_dir, rule_pair, random_rotation)
         if hist is None:
+            print("Here2")
             continue
         else:
             bins_edge = bins_edge_
