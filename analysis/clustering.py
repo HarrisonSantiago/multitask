@@ -58,15 +58,22 @@ class Analysis(object):
         # First only get active units. Total variance across tasks larger than 1e-3
         # ind_active = np.where(h_var_all_.sum(axis=1) > 1e-2)[0]
         ind_active = np.where(h_var_all_.sum(axis=1) > 1e-3)[0]
-        h_var_all  = h_var_all_[ind_active, :]
+        ind_inactive = np.where(h_var_all_.sum(axis=1) < 1e-3)[0]
+
+        h_var_inactive = h_var_all[ind_inactive, : ] #all the 'inactive' neurons
+        h_var_all  = h_var_all_[ind_active, :] #all the active neurons
 
         # Normalize by the total variance across tasks
         if normalization_method == 'sum':
             h_normvar_all = (h_var_all.T/np.sum(h_var_all, axis=1)).T
+            h_normvar_inactive = (h_var_inactive.T / np.sum(h_var_inactive, axis = 1)).T
         elif normalization_method == 'max':
             h_normvar_all = (h_var_all.T/np.max(h_var_all, axis=1)).T
+            h_normvar_inactive = (h_var_inactive.T / np.max(h_var_inactive, axis = 1)).T
+
         elif normalization_method == 'none':
             h_normvar_all = h_var_all
+            h_normvar_inactive = h_normvar_inactive
         else:
             raise NotImplementedError()
 
@@ -170,6 +177,10 @@ class Analysis(object):
         self.hp = hp
         self.data_type = data_type
         self.rules = hp['rules']
+
+        self.h_var_inactive = h_var_inactive
+        self.ind_inactive = ind_inactive
+        self.h_normvar_inactive = h_normvar_inactive
 
     def plot_cluster_score(self, save_name=None):
         """Plot the score by the number of clusters."""
