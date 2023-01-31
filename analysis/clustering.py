@@ -60,7 +60,7 @@ class Analysis(object):
         ind_active = np.where(h_var_all_.sum(axis=1) > 1e-3)[0]
         ind_inactive = np.where(h_var_all_.sum(axis=1) < 1e-3)[0]
 
-        h_var_inactive = h_var_all[ind_inactive, : ] #all the 'inactive' neurons
+        h_var_inactive = h_var_all_[ind_inactive, : ] #all the 'inactive' neurons
         h_var_all  = h_var_all_[ind_active, :] #all the active neurons
 
         # Normalize by the total variance across tasks
